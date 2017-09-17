@@ -19,6 +19,18 @@ from time import sleep
 
 header = {'user-agent': 'Mozilla/5.0 (X11; Linux i686; rv:43.0) Gecko/10100101 Firefox/43.0 Iceweasel/43.0.4'}
 
+def callmenu():
+	try:
+		binnn.destroy()
+	except:
+		pass
+	try:
+		window.destroy()
+	except:
+		pass
+	main()
+
+
 def CleanTemp():
 	temporario = tempfile.gettempdir()
 	print("\n[!] Limpando arquivos temporario!\n")
@@ -67,7 +79,7 @@ def binchecker():
 			print("[!] Error ao requisitar!\n")
 
 	menu.destroy()
-
+	global binnn
 	binnn = Tk()
 	binnn.title('Bin Checker')
 	binnn['bg'] = 'black'
@@ -85,6 +97,11 @@ def binchecker():
 	exitbin = Button(binnn, width=20, text="Sair!", command=sair, fg="green", bg='black')
 	exitbin.place(x=75, y=190)
 
+	funcMenu = Button(binnn, text="MENU", command=callmenu, fg="Green", bg="black")
+	funcMenu.place(x=75, y=220)
+
+
+
 	binnn.geometry("300x300+200+200")
 	binnn.mainloop()
 
@@ -99,20 +116,53 @@ def main():
 	con = Button(menu, text="Consultor", command=Consultar, bg="black", fg="green", width=20)
 	con.place(x=75, y=60)
 			
-	bincheck = Button(menu, text="Validar Bin", command=binchecker, bg="black", fg="green", width=20)
+	bincheck = Button(menu, text="Check Bin", command=binchecker, bg="black", fg="green", width=20)
 	bincheck.place(x=75, y=100)
 
 	clean = Button(menu, text="Limpar Arquivos Temp.", command=CleanTemp, bg="black", fg="green", width=20)
-	clean.place(x=75, y=130)
+	clean.place(x=75, y=140)
 
 	exitt = Button(menu, text="Sair!", command=sair, bg="black", fg="green", width=20)
-	exitt.place(x=75, y=160)
+	exitt.place(x=75, y=180)
+
+	base = Label(menu, text=" ========== Base64 Encode ==========", fg="green", bg="black")
+	base.place(x=20, y=220)
+
+	baseLabel = Label(menu, text="String > ", fg="green", bg="black")
+	baseLabel.place(x=5, y=250)
+
+	baseEntry = Entry(menu, width=24)
+	baseEntry.place(x=75, y=250)
+
+	def encodarbase64():
+		string = baseEntry.get()
+		encriptado = base64.b64encode(string)
+		stringbase = Label(menu, text="Encryptado > ", fg="green", bg="black")
+		stringbase.place(x=5, y=360)
+		enc = Label(menu, text=encriptado, fg="green", bg="black")
+		enc.place(x=80, y=360)
+		gerararq = Label(menu, text="Gerando arquivo: encoded.txt", fg="green", bg="black")
+		gerararq.place(x=75, y=390)
+		arq = open('encoded.txt', 'w')
+		arq.write(encriptado)
+		arq.close()
+
+	def function():
+		baseEntry = Entry(menu, width=24)
+		baseEntry.place(x=75, y=250)
+
+	Buttonbase64 = Button(menu, text="Encodar", command=encodarbase64, fg="green", bg="black", width=20)
+	Buttonbase64.place(x=75, y=290)
+
+	Buttonbase64 = Button(menu, text="CleanString", command=function, fg="green", bg="black", width=20)
+	Buttonbase64.place(x=75, y=320)
 
 	menu['bg'] = 'black'
-	menu.geometry("300x300+200+200")
+	menu.geometry("300x450+200+200")
 	menu.mainloop()
 
 def Consultar():
+
 	def requisitar():
 		cpf = edi2.get()
 		cnpj = edi1.get()
@@ -185,9 +235,22 @@ def Consultar():
 	bot2 = Button(window, width=20, text="Sair!", command=sair, fg="Green", bg='black')
 	bot2.place(x=75, y=250)
 
-	adriellb = Label(window, text="==== Creditos Adriel Freud ====", fg="green", bg="black")
+	def functionCLEAR():
+		edi1 = Entry(window, width=24)
+		edi1.place(x=75, y=180)
+		edi2 = Entry(window, width=24)
+		edi2.place(x=75, y=120)
+
+	adriellb = Label(window, text="==== Creditos Adriel Freud e Oto Nk ====", fg="green", bg="black")
 	adriellb.pack(side=TOP)
-	adriellb.place(x=40, y=30)
+	adriellb.place(x=35, y=30)
+
+	funcMenu = Button(window, text="MENU", command=callmenu, fg="Green", bg="black")
+	funcMenu.place(x=10, y=150)
+
+	funCLEAR = Button(window, text="CLEAR", command=functionCLEAR, fg="green", bg="black")
+	funCLEAR.place(x=240, y=150)
+
 
 	window['bg'] = 'black'
 	window.geometry("300x300+200+200")
