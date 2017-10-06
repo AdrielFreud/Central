@@ -16,6 +16,8 @@ import base64
 from Tkinter import *
 import os
 from time import sleep
+os.system('color a')
+os.system('title Central - Adriel Freud')
 
 header = {'user-agent': 'Mozilla/5.0 (X11; Linux i686; rv:43.0) Gecko/10100101 Firefox/43.0 Iceweasel/43.0.4'}
 
@@ -137,15 +139,11 @@ def main():
 	def encodarbase64():
 		string = baseEntry.get()
 		encriptado = base64.b64encode(string)
-		stringbase = Label(menu, text="Encryptado > ", fg="green", bg="black")
-		stringbase.place(x=5, y=360)
-		enc = Label(menu, text=encriptado, fg="green", bg="black")
-		enc.place(x=80, y=360)
-		gerararq = Label(menu, text="Gerando arquivo: encoded.txt", fg="green", bg="black")
+		gerararq = Label(menu, text="Gerado arquivo: encoded.txt", fg="green", bg="black")
 		gerararq.place(x=75, y=390)
-		arq = open('encoded.txt', 'w')
-		arq.write(encriptado)
-		arq.close()
+		with open('encoded.txt', 'w') as w:
+			w.write(encriptado+'\n')
+			w.close()
 
 	def function():
 		baseEntry = Entry(menu, width=24)
@@ -164,13 +162,16 @@ def main():
 def Consultar():
 
 	def requisitar():
-		cpf = edi2.get()
-		cnpj = edi1.get()
+		#cpf_puro = edi2.get().replace('.', '-')
+		#cnpj_puro = edi1.get().replace('.', '-')
+		cpf = edi2.get() #cpf_puro.replace('-', '')
+		cnpj = edi1.get() #cnpj_puro.replace('-', '')
+
 		if cpf:
 			os.system('cls')
-			url = 'aHR0cHM6Ly9jb25zdWx0YXJjcGYuZ3JhdGlzL21vYmlsZS9yZS5waHA/Y3BmPXswfSZjb25zdWx0YXI9T0s='
-			enc = base64.b64decode(url)
-			req = requests.get(enc.format(cpf), headers=header)
+			url = 'aHR0cHM6Ly9jb25zdWx0YXJjcGYuZ3JhdGlzL21vYmlsZS9yZS5waHA/Y3BmPXswfQ=='
+			enc = base64.b64decode(url).format(cpf)
+			req = requests.get(enc, headers=header)
 			code = req.status_code
 			html = req.text
 			if code == 200:
