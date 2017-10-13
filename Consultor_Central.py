@@ -19,6 +19,7 @@ from time import sleep
 os.system('color a')
 os.system('title Central - Adriel Freud')
 
+temporario = tempfile.gettempdir()
 header = {'user-agent': 'Mozilla/5.0 (X11; Linux i686; rv:43.0) Gecko/10100101 Firefox/43.0 Iceweasel/43.0.4'}
 
 def callmenu():
@@ -34,7 +35,6 @@ def callmenu():
 
 
 def CleanTemp():
-	temporario = tempfile.gettempdir()
 	print("\n[!] Limpando arquivos temporario!\n")
 	os.system('del %s /S /Q'%temporario)
 	os.chdir('C:\\Windows\\Temp')
@@ -162,10 +162,8 @@ def main():
 def Consultar():
 
 	def requisitar():
-		#cpf_puro = edi2.get().replace('.', '-')
-		#cnpj_puro = edi1.get().replace('.', '-')
-		cpf = edi2.get() #cpf_puro.replace('-', '')
-		cnpj = edi1.get() #cnpj_puro.replace('-', '')
+		cpf = edi2.get()
+		cnpj = edi1.get()
 
 		if cpf:
 			os.system('cls')
@@ -186,8 +184,8 @@ def Consultar():
 			enc = base64.b64decode(url)
 			req = requests.get(enc.format(cnpj), headers=header)
 			code = req.status_code
+			html = req.text
 			if code == 200:
-				html = req.text
 				receita = json.loads(html)
 				print("\n\n")
 				print("Atividade Principal: %s"%receita['atividade_principal'][0]['text'])
