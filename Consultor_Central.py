@@ -4,6 +4,8 @@
 #   =>DebutySecTeamSecurity<=
 #conding: utf-8
 
+#conding: utf-8
+
 #!/bin/usr/python
 import tempfile
 import sys, json
@@ -15,7 +17,8 @@ import os
 from time import sleep
 os.system('color a')
 os.system('title Central - Adriel Freud')
-print("""\n
+
+menu = """\n\n
 -----------------------------------------
 
   #  Desenvolvido por Adriel Freud!
@@ -24,7 +27,9 @@ print("""\n
   #   =>DebutySecTeamSecurity<=
 
 -----------------------------------------
-\n""")
+\n"""
+
+print(menu)
 temporario = tempfile.gettempdir()
 header = {'user-agent': 'Mozilla/5.0 (X11; Linux i686; rv:43.0) Gecko/10100101 Firefox/43.0 Iceweasel/43.0.4'}
 
@@ -238,6 +243,7 @@ def Consultar():
 	bot2.place(x=75, y=250)
 
 	def functionCLEAR():
+		os.system('cls')
 		edi1 = Entry(window, width=24)
 		edi1.place(x=75, y=180)
 		edi2 = Entry(window, width=24)
@@ -265,11 +271,10 @@ def testar():
 	if (loginn and password == passwd):
 		print("[Logado com Sucesso!]\n")
 		arq = open('conf.deb', 'w')
-		arq.write(password)
+		arq.write('bank account')
 		arq.close()
 		login.destroy()
 		main()
-
 	else:
 		print("[!] Usuario ou Senha Invalidos, Tente Novamente!\n")
 
@@ -306,16 +311,15 @@ def logar():
 	#################################
 	login.geometry("270x200+100+100")
 	login.mainloop()
-
 ##################################################################
-
 if (os.path.exists('conf.deb') == True):
 	with open('conf.deb') as conf:
 		linhas = conf.read()
-		if 'adriel' in linhas:
+		if 'bank account' in linhas:
 			main()
 		else:
 			logar()
 		conf.close()
+
 else:
 	logar()
