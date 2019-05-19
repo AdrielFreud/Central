@@ -7,23 +7,22 @@
 #conding: utf-8
 
 #!/bin/usr/python
-import requests, base64, tempfile, sys, json, os, random, string, webbrowser, subprocess, getpass, hashlib
+import requests, base64, tempfile, sys, json, os, random, string, webbrowser, subprocess, getpass, hashlib, tkMessageBox
 from bs4 import BeautifulSoup
 from tkFileDialog import askopenfilename
 from Tkinter import *
 from time import sleep
+from ctypes import *
 
 #os.system('color a')
 os.system('title Central - Adriel Freud')
 
 menu = """\n\n
 -----------------------------------------
-
   #  Desenvolvido por Adriel Freud!
   #  Contato: businessc0rp2k17@gmail.com 
   #  FB: http://www.facebook.com/xrn401
   #   =>DebutySecTeamSecurity<=
-
 -----------------------------------------
 \n"""
 
@@ -79,6 +78,10 @@ def gerar_cvc(num):
 
 def callmenu():
 	try:
+		gerador_de_cc.destroy()
+	except:
+		pass
+	try:
 		binnn.destroy()
 	except:
 		pass
@@ -111,6 +114,7 @@ def gerando_cc():
 	a.close()
 
 def Gerador_CC():
+	menu.destroy()
 	global gerador_de_cc
 	gerador_de_cc = Tk()
 	gerador_de_cc.title('Gerador de CC')
@@ -118,17 +122,17 @@ def Gerador_CC():
 	gerador_de_cc.geometry("300x200+200+200")
 	#########################
 	info = Label(gerador_de_cc, text=" - obs; Insira sua BIN abaixo!", font="Arial 10").pack(side=TOP)
-	bincc = Label(gerador_de_cc, text="BIN:", fg="green", bg="black").place(x=34, y=90)
+	bincc = Label(gerador_de_cc, text="BIN:", fg="white", bg="black").place(x=34, y=90)
 	#########################
 	global entry_bincc
-	entry_bincc = Entry(gerador_de_cc, fg="black", bg="white")
+	entry_bincc = Entry(gerador_de_cc)
 	entry_bincc.place(x=90, y=90)
-	labelcc = Label(gerador_de_cc, fg="green", bg="black").place(x=30, y=90)
 	#########################
-	button_cc = Button(gerador_de_cc, text="Gerar!", fg="green", bg="black", width=20, command=gerando_cc).place(x=80, y=150)
+	funcMenu = Button(gerador_de_cc, text="MENU", command=callmenu, bg='#4F4F4F', fg='white').place(x=30, y=150)
+	button_cc = Button(gerador_de_cc, text="Gerar!", bg='#4F4F4F', fg='white', width=20, command=gerando_cc).place(x=80, y=150)
 	#########################
 	global len_credits
-	len_credits = Entry(gerador_de_cc, fg="black", bg='white', width=5)
+	len_credits = Entry(gerador_de_cc, width=5)
 	len_credits.place(x=240, y=90)
 
 	gerador_de_cc.mainloop()
@@ -200,26 +204,25 @@ def binchecker():
 	print(" - obs; Pode Inserir CCV inteira junto a CVC e MES/DATA@ - Delimiter: | ")
 	binnn['bg'] = 'black'
 	#################################
-	Abrircc = Button(binnn, text="Abrir txt com Varias CC'S!", fg="green", bg='black', command=openccs).place(x=30, y=60)
+	Abrircc = Button(binnn, text="Abrir txt com Varias CC'S!", bg='#4F4F4F', fg='white', command=openccs).place(x=30, y=60)
 	#################################
-	labelbin = Label(binnn, text="Insira a Bin ou um Cartao Valido!", fg="green", bg='black').place(x=30, y=100)
+	labelbin = Label(binnn, text="Insira a Bin ou um Cartao Valido!", bg='black', fg='white').place(x=30, y=100)
 	#################################
 	entrybin = Entry(binnn, width=20)
 	entrybin.place(x=75, y=130)
 	#################################
-	checkbt = Button(binnn, width=20, text="Checkar!", command=check, fg="Green", bg='black').place(x=75, y=160)
+	checkbt = Button(binnn, width=20, text="Checkar!", command=check, bg='#4F4F4F', fg='white').place(x=75, y=160)
 	#################################
-	exitbin = Button(binnn, width=20, text="Sair!", command=sair, fg="green", bg='black').place(x=75, y=190)
+	exitbin = Button(binnn, width=20, text="Sair!", command=sair, bg='#4F4F4F', fg='white').place(x=75, y=190)
 	#################################
-	funcMenu = Button(binnn, text="MENU", command=callmenu, fg="Green", bg="black").place(x=75, y=220)
+	funcMenu = Button(binnn, text="MENU", command=callmenu, bg='#4F4F4F', fg='white').place(x=75, y=220)
 	#################################
 	binnn.geometry("300x300+200+200")
 	binnn.mainloop()
 
 def CleanTemp():
-	print(menu)
 	root = Tk()
-	root.title('-:[ Limpador by Adriel ]:-')
+	root.title("-:[ Limpador by Adriel ]:-")
 
 	root['bg'] = 'black'
 	root.geometry("300x500+200+200")
@@ -228,10 +231,13 @@ def CleanTemp():
 	root.config(menu=menubar)
 	filemenu = Menu(menubar)
 	menubar.add_cascade(label='Menu', menu=filemenu)
+	if windll.shell32.IsUserAnAdmin() == 0:
+		tkMessageBox.showwarning("Warning", "Execute como administrador para uma limpeza Profunda!")
+	else:
+		pass
 
 	def Creditos():
-		os.system('color a')
-		print(menu)
+		tkMessageBox.showinfo("Creditos", cred)
 
 	filemenu.add_command(label='Creditos', command=Creditos)
 
@@ -252,58 +258,35 @@ def CleanTemp():
 	filemenu.add_command(label='Exit', command=Exit)
 
 	def call_all_functions():
-		list_thread = [clear_temp(), clear_prefetch(), clean_system(), cleanmgr(), clear_SoftwareDistribution()]
+		list_thread = [clear_temp(), clear_prefetch(), clear_SoftwareDistribution(), clean_system(), cleanmgr()]
 		for threads in list_thread:
-			t = threading.Thread(target=threads, args=())
-			t.start()
-
-		for j in list_thread:
-			j.join()
-
-	def clear_all():
-		print(menu)
-		print("\n\t[!] Limpando todos os arquivos temporarios!\n")
-		try:
-			call_all_functions()
-			print("\n\t[+] Diretorios Limpados com sucesso!\n\n")
-		except:
-			print("\n\n\t[!!] Execute como Administrador!\n\n")
+			threading.Thread(target=threads, args=()).start()
+		tkMessageBox.showinfo("Information", "Todos os arquivos inuteis foram retirados do seu computador, Obrigado por utilizar nosso programa! Att. AdrielFreud :)")
 
 	def clear_temp():
-		print(menu)
 		try:
-			print("\t[!!!] Limpando TEMP!\n\n")
-
 			os.chdir('C:\\Windows\\Temp')
 			for temp1 in os.listdir('.'):
 				if os.path.isdir(temp1) == True:
 					os.system('rmdir %s /S /Q'%temp1)
 				else:
 					os.system('del %s /S /Q /F'%temp1)
-		except:
-			print("\n\n\t[!!] Execute como Administrador!\n\n")
-		try:
 			os.chdir('C:\\Temp')
 			for temp2 in os.listdir('.'):
 				if os.path.isdir(temp2) == True:
 					os.system('rmdir %s /S /Q'%temp2)
 				else:
 					os.system('del %s /S /Q /F'%temp2)
-
 			os.chdir(temporario)
 			for temp3 in os.listdir('.'):
 				if os.path.isdir(temp3) == True:
 					os.system('rmdir %s /S /Q'%temp3)
 				else:
 					os.system('del %s /S /Q /F'%temp3)
-
-			print("\t[+++] Arquivos Limpados!\n\n")
 		except:
-			print("\n\n\t[!!] Execute como Administrador!\n\n")
+			pass
 
 	def clear_prefetch():
-		print(menu)
-		print("\t[!!!] Limpando PREFETCH!\n")
 		try:
 			os.chdir('C:\\Windows\\Prefetch')
 			for prefetch in os.listdir('.'):
@@ -311,13 +294,10 @@ def CleanTemp():
 					os.system('rmdir %s /S /Q'%prefetch)
 				else:
 					os.system('del %s /S /Q /F'%prefetch)
-			print("\n\t[+++] Prefetch Limpada!\n\n")
 		except:
-			print("\n\n\t[!!] Execute como Administrador!\n\n")
+			pass
 
 	def clear_SoftwareDistribution():
-		print(menu)
-		print("\t[!!!] Limpando SoftwareDistribution!\n\n")
 		try:
 			os.chdir('C:\\Windows\\installer')
 			for installer in os.listdir('.'):
@@ -340,10 +320,8 @@ def CleanTemp():
 				else:
 					os.system('del %s /S /Q /F'%ProgramFiles)
 					
-			print("\n\t[+++] Limpada!\n\n")
 		except:
-			print("\n\n\t[!!] Execute como Administrador!\n\n")
-
+			pass
 
 	info_sistema = Label(root, text='Limpador de Arquivos Temporarios do Sistema', bg='black', fg='white', font="Arial 10").place(x=12,y=10)
 	temp = Button(root, text='Clean TEMP', bg='#4F4F4F', fg='white', width=30, command=clear_temp).place(x=40, y=60)
@@ -351,14 +329,13 @@ def CleanTemp():
 	Distribution = Button(root, text='Clean SoftwareDistribution', bg='#4F4F4F', fg='white', width=30, command=clear_SoftwareDistribution).place(x=40, y=140)
 	####
 	info_clean_all = Label(root, text='> Limpador em Massa de Arquivos <', bg='black', fg='white', font="Arial 10").place(x=40, y=195)
-	clean_all = Button(root, text='Clean ALL FILES', bg='#4F4F4F', fg='white', width=30, command=clear_all).place(x=40, y=250)
+	clean_all = Button(root, text='Clean ALL FILES', bg='#4F4F4F', fg='white', width=30, command=call_all_functions).place(x=40, y=250)
 
 	# - Startup - #
 
 	def Add_Startup():
-		print(menu)
-		print('\n\t[!!] Adicionado ao Startup!\n\n')
-		os.chdir('C:\\programdata')
+		tkMessageBox.showinfo('Information', '[!!] Adicionado ao Startup!')
+		os.chdir('C:\\ProgramData')
 		os.system('mkdir Startup-Cleandir')
 		os.chdir('Startup-Cleandir/')
 		with open('start.vbs', 'w') as w:
@@ -367,7 +344,6 @@ def CleanTemp():
 			with open('clean.bat', 'w') as clean:
 				clean.write('''
 	@echo off
-
 	cd "C:\\Windows\\SoftwareDistribution\\Download"
 	del * /S /Q /F
 	rmdir * /S /Q
@@ -382,41 +358,44 @@ def CleanTemp():
 	rmdir * /S /Q
 	cd %temp%
 	del * /S /Q /F
-	rmdir * /S /Q''').strip('\n')
+	rmdir * /S /Q''')
 				clean.close()
-				subprocess.Popen(r'reg add "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run" /v "CleanDIRS" /d "%ProgramData%\\Startup-Cleandir\\start.vbs" /f', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+				subprocess.Popen('reg add "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run" /v "CleanDIRS" /d "%ProgramData%\\Startup-Cleandir\\start.vbs" /f', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
 
 	def Remove_Startup():
-		print(menu)
-		print('\n\t[!] Removendo Startup!\n\n')
+		tkMessageBox.showinfo('Information', '[!] Removendo Startup!')
 		os.chdir('C:\\ProgramData')
 		os.system('rmdir Startup-Cleandir /S /Q')
-		print('\n\t[!] Startup Removido!\n\n')
+		print('\t[!] Startup Removido!\n')
 
 	def cleanmgr():
-		print(menu)
-		print("\n\n\t[@@@] Selecione todas as TextBox e Inicie uma Limpeza Profunda!\n\n")
-		proc = subprocess.Popen('cleanmgr', shell=True)
-		proc.wait()
+		tkMessageBox.showinfo('Information', "[@@@] Selecione todas as TextBox e Inicie uma Limpeza Profunda!")
+		subprocess.Popen('RunDll32.exe inetcpl.cpl, ClearMyTracksByProcess 255', shell=True)
+		subprocess.Popen('cleanmgr', shell=True).wait()
 
 	def clean_system():
-		print("\n\n\t[!!!] Limpeza de Cache do Sistema!\n\n")
-
 		subprocess.Popen('ipconfig /flushdns', shell=True)
-	 	subprocess.Popen('RunDll32.exe inetcpl.cpl , ClearMyTracksByProcess 255', shell=True)
+		os.chdir('%s\\AppData\\Local\\Microsoft\\Windows\\INetCache\\IE'%usr)
 
-		os.chdir('C:\\Users\\adrie_000\\AppData\\Local\\Microsoft\\Windows\\INetCache\\IE')
 		for INetCache in os.listdir('.'):
-				if os.path.isdir(INetCache) == True:
-					os.system('rmdir %s /S /Q'%INetCache)
-				else:
-					os.system('del %s /S /Q /F'%INetCache)
+			if os.path.isdir(INetCache) == True:
+				os.system('rmdir %s /S /Q'%INetCache)
+			else:
+				os.system('del %s /S /Q /F'%INetCache)
+
 		os.chdir('C:\\WINDOWS\\Offline Web Pages')	
 		for Offline in os.listdir('.'):
-				if os.path.isdir(Offline) == True:
-					os.system('rmdir %s /S /Q'%Offline)
-				else:
-					os.system('del %s /S /Q /F'%Offline)
+			if os.path.isdir(Offline) == True:
+				os.system('rmdir %s /S /Q'%Offline)
+			else:
+				os.system('del %s /S /Q /F'%Offline)
+
+		os.chdir('C:\\Windows')
+		try:
+			os.system("del *.log /a /s /q /f")
+		except:
+			pass
+
 
 	Startup = Button(root, text='ADD Startup', bg='#4F4F4F', fg='white', width=30, command=Add_Startup).place(x=40, y=290)
 	remove_Startup = Button(root, text='REMOVE Startup', bg='#4F4F4F', fg='white', width=30, command=Remove_Startup).place(x=40, y=330)
@@ -432,19 +411,19 @@ def main():
 	menu.title("Menu")
 	info = Label(menu, text="- Central feita por Adriel Freud - ", font="Arial 10").pack(side=TOP)
 	#################################
-	con = Button(menu, text="Consultor", command=Consultar, bg="black", fg="green", width=20).place(x=75, y=60)
+	con = Button(menu, text="Consultor", command=Consultar, bg='#4F4F4F', fg='white', width=20).place(x=75, y=60)
 	#################################
-	bincheck = Button(menu, text="Check Bin && CC", command=binchecker, bg="black", fg="green", width=20).place(x=75, y=100)
+	bincheck = Button(menu, text="Check Bin && CC", command=binchecker, bg='#4F4F4F', fg='white', width=20).place(x=75, y=100)
 	#################################
-	clean = Button(menu, text="Limpar Arquivos Temp.", command=CleanTemp, bg="black", fg="green", width=20).place(x=75, y=140)
+	clean = Button(menu, text="Limpar Arquivos Temp.", command=CleanTemp, bg='#4F4F4F', fg='white', width=20).place(x=75, y=140)
 	#################################
-	cc = Button(menu, text="Gerador de CC", command=Gerador_CC, bg="black", fg="green", width=20).place(x=75, y=180)
+	cc = Button(menu, text="Gerador de CC", command=Gerador_CC, bg='#4F4F4F', fg='white', width=20).place(x=75, y=180)
 	#################################
-	exitt = Button(menu, text="Sair!", command=sair, bg="black", fg="green", width=20).place(x=75, y=220)
+	exitt = Button(menu, text="Sair!", command=sair, bg='#4F4F4F', fg='white', width=20).place(x=75, y=220)
 	#################################
-	base = Label(menu, text=" ========== Base64 Encode ==========", fg="green", bg="black").place(x=20, y=250)
+	base = Label(menu, text=" ========== Base64 Encode ==========", bg='black', fg='white').place(x=20, y=250)
 	#################################
-	baseLabel = Label(menu, text="String > ", fg="green", bg="black").place(x=5, y=290)
+	baseLabel = Label(menu, text="String > ", bg='black', fg='white').place(x=5, y=290)
 	#################################
 	baseEntry = Entry(menu, width=24)
 	baseEntry.place(x=75, y=290)
@@ -452,7 +431,7 @@ def main():
 	def encodarbase64():
 		string = baseEntry.get()
 		encriptado = base64.b64encode(string)
-		gerararq = Label(menu, text="Gerado arquivo: encoded.txt", fg="green", bg="black").place(x=75, y=400)
+		gerararq = Label(menu, text="Gerado arquivo: encoded.txt", bg='black', fg='white').place(x=75, y=400)
 		with open('encoded.txt', 'w') as w:
 			w.write(encriptado+'\n')
 			w.close()
@@ -461,9 +440,9 @@ def main():
 		baseEntry = Entry(menu, width=24)
 		baseEntry.place(x=75, y=250)
 
-	Buttonbase64 = Button(menu, text="Encodar", command=encodarbase64, fg="green", bg="black", width=20).place(x=75, y=330)
+	Buttonbase64 = Button(menu, text="Encodar", command=encodarbase64, bg='#4F4F4F', fg='white', width=20).place(x=75, y=330)
 	#################################
-	Buttonbase64 = Button(menu, text="CleanString", command=function, fg="green", bg="black", width=20).place(x=75, y=365)
+	Buttonbase64 = Button(menu, text="CleanString", command=function, bg='#4F4F4F', fg='white', width=20).place(x=75, y=365)
 	#################################
 	menu['bg'] = 'black'
 	menu.geometry("300x450+200+200")
@@ -554,13 +533,13 @@ def Consultar():
 
 	window.title('= Central by AdrielFreud =')
 	#################################
-	lb = Label(window, text="Consultor CPF", fg="green", bg='black').place(x=75, y=90)
+	lb = Label(window, text="Consultor CPF", bg='black', fg='white').place(x=75, y=90)
 	#################################
-	lb3 = Label(window, text="Consultor Nome", fg="green", bg='black').place(x=75, y=35)
+	lb3 = Label(window, text="Consultor Nome", bg='black', fg='white').place(x=75, y=35)
 	#################################
-	l2 = Label(window, text="Consultor CNPJ", fg="green", bg='black').place(x=75, y=150)
+	l2 = Label(window, text="Consultor CNPJ", bg='black', fg='white').place(x=75, y=150)
 	#################################
-	bt1 = Button(window, width=20, text="Consultar", command=requisitar, fg="Green", bg='black').place(x=75, y=220)
+	bt1 = Button(window, width=20, text="Consultar", command=requisitar, bg='#4F4F4F', fg='white').place(x=75, y=220)
 
 	#cnpj
 	edi1 = Entry(window, width=24)
@@ -575,7 +554,7 @@ def Consultar():
 	edi3 = Entry(window, width=24)
 	edi3.place(x=75, y=65)
 
-	bot2 = Button(window, width=20, text="Sair!", command=sair, fg="Green", bg='black').place(x=75, y=250)
+	bot2 = Button(window, width=20, text="Sair!", command=sair, bg='#4F4F4F', fg='white').place(x=75, y=250)
 
 	def functionCLEAR():
 		os.system('cls')
@@ -584,11 +563,11 @@ def Consultar():
 		edi2 = Entry(window, width=24)
 		edi2.place(x=75, y=120)
 
-	adriellb = Label(window, text="==== Creditos Adriel Freud ====", fg="green", bg="black").pack(side=TOP)
+	adriellb = Label(window, text="==== Creditos Adriel Freud ====", bg='black', fg='white').pack(side=TOP)
 	#################################
-	funcMenu = Button(window, text="MENU", command=callmenu, fg="Green", bg="black").place(x=10, y=150)
+	funcMenu = Button(window, text="MENU", command=callmenu, bg='#4F4F4F', fg='white').place(x=10, y=150)
 	#################################
-	funCLEAR = Button(window, text="CLEAR", command=functionCLEAR, fg="green", bg="black").place(x=240, y=150)
+	funCLEAR = Button(window, text="CLEAR", command=functionCLEAR, bg='#4F4F4F', fg='white').place(x=240, y=150)
 	#################################
 	window['bg'] = 'black'
 	window.geometry("300x300+200+200")
@@ -601,9 +580,9 @@ def logar():
 	login.title('Login Central - Freud')
 	login['bg'] = "black"
 	#################################
-	label1 = Label(login, text="Login: ", bg="black", fg="green").place(x=5, y=30)
+	label1 = Label(login, text="Login: ", bg='black', fg='white').place(x=5, y=30)
 	#################################
-	label2 = Label(login, text="Senha: ", bg="black", fg="green").place(x=5, y=60)
+	label2 = Label(login, text="Senha: ", bg='black', fg='white').place(x=5, y=60)
 	#################################
 	global ed1, ed2
 	ed1 = Entry(login)
@@ -615,13 +594,13 @@ def logar():
 	bt2 = Button(login, text="Sair", bg="black", fg="green", command=sair, width=20).place(x=60, y=130)
 	#################################
 
-	cred = Label(login, text="Facebook", fg="green", bg="black", cursor="hand2")
+	cred = Label(login, text="Facebook", bg='black', fg='white', cursor="hand2")
 	cred.place(x=10, y=170)
 
-	cred1 = Label(login, text="Github", fg="green", bg="black", cursor="hand2")
+	cred1 = Label(login, text="Github", bg='black', fg='white', cursor="hand2")
 	cred1.place(x=110, y=170)
 
-	cred2 = Label(login, text="Youtube", fg="green", bg="black", cursor="hand2")
+	cred2 = Label(login, text="Youtube", bg='black', fg='white', cursor="hand2")
 	cred2.place(x=210, y=170)
 
 	cred.bind("<Button-1>", callback)
