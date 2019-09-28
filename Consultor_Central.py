@@ -4,8 +4,6 @@
 #   =>DebutySecTeamSecurity<=
 #conding: utf-8
 
-#conding: utf-8
-
 #!/bin/usr/python
 import requests, base64, tempfile, sys, json, os, random, string, webbrowser, subprocess, getpass, hashlib, tkMessageBox
 from bs4 import BeautifulSoup
