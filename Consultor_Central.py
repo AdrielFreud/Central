@@ -108,7 +108,7 @@ def gerando_cc():
 		else:
 		  	a.write(ccv_inteira+'\n')
 			NOT_LUHN += 1
-	print("[WARNING] - Total [TRUE] Luhn Algoritm: %i | Total Failed: %i"%(NOT_LUHN, LUHN))
+	tkMessageBox.showinfo("Info", "[WARNING] - Total [TRUE] Luhn Algoritm: %i | Total Failed: %i"%(NOT_LUHN, LUHN))
 	a.close()
 
 def Gerador_CC():
@@ -141,65 +141,64 @@ def binchecker():
 		hizi.withdraw()
 		filename = askopenfilename(parent=hizi)
 		f = open(filename, 'r')
-
 		for lines in f.readlines():
-			url = 'http://www.huntertester.net/testador.php?testar=cc&ccs={0}&separador=|&id=1'.format(lines)
-			r = requests.get(url, headers=header)
-			print('\n'+r.content)
-			if 'APRO' in r.content:
-				a = open('APROVADAAAS!!.txt', 'w')
-				a.write(r.content)
-		a.close()
+			url = 'https://www.ke1.nl/en/checker/api.php'
+			r = requests.post(url, headers=header, data={'data':lines})
+			bs = BeautifulSoup(r.content, 'lxml')
+			data = ""
+			if 'Live' in r.content:
+				for a in bs.find_all('div'):
+					data += a.get_text()
+
+			a = open('APROVADAAAS!!.txt', 'a')
+			a.write(data)
+			a.close()
+		f.close()
 
 	def check():
 		os.system('cls')
 		biin = entrybin.get()
 
 		if len(biin) >= 16:
-			url = 'http://www.huntertester.net/testador.php?testar=cc&ccs={0}&separador=|&id=1'.format(entrybin.get())
-			r = requests.get(url, headers=header)
-			print('\n'+r.content)
+			url = 'https://www.ke1.nl/en/checker/api.php'
+			r = requests.post(url, headers=header, data={'data':entrybin.get()})
+			bs = BeautifulSoup(r.content, 'lxml')
+			for a in bs.find_all('div'):
+				tkMessageBox.showinfo("Info", a.get_text())
 
 		else:
 			url = "https://lookup.binlist.net/{0}".format(biin)
 			req = requests.get(url, headers=header)
 			code = req.status_code
 			html = req.text
+			data = ""
 			if code == 200:
 				jsbin = json.loads(html)
-				print("\nNumber: \n")
-				print("Lenght: %s"%jsbin['number']['length'])
-				print("Prefix: %s"%jsbin['number']['prefix'])
-				print("Type: %s"%jsbin['type'])
-				print("Brand: %s"%jsbin['brand'])
-				print("Prepaid: %s"%jsbin['prepaid'])
 				try:
-					print("Bank Name: %s"%jsbin['bank']['name'])
+					data += "\nNumber: \n"
+					data += "Lenght: %s"%jsbin['number']['length']
+					data += "Prefix: %s"%jsbin['number']['prefix']
+					data += "Type: %s"%jsbin['type']
+					data += "Brand: %s"%jsbin['brand']
+					data += "Prepaid: %s"%jsbin['prepaid']
+					data += "Bank Name: %s"%jsbin['bank']['name']
+					data += "Bank Logo: %s"%jsbin['bank']['logo']
+					data += "Bank City: %s"%jsbin['bank']['city']
+					data += "Bank Phone: %s"%jsbin['bank']['phone']
+					data += "Contry alpha: %s"%jsbin['country']['alpha2']
+					data += "Contry Name: %s"%jsbin['country']['name']
+					data += "Contry Numeric: %s"%jsbin['country']['numeric']
+					tkMessageBox.showinfo("Info", data)
 				except:
 					pass
-				try:
-					print("Bank Logo: %s"%jsbin['bank']['logo'])
-				except:
-					pass
-				try:
-					print("Bank City: %s"%jsbin['bank']['city'])
-				except:
-					pass
-				try:
-					print("Bank Phone: %s"%jsbin['bank']['phone'])
-				except:
-					pass
-				print("Contry alpha: %s"%jsbin['country']['alpha2'])
-				print("Contry Name: %s"%jsbin['country']['name'])
-				print("Contry Numeric: %s"%jsbin['country']['numeric'])
 			else:
-				print("[!] Error ao requisitar!\n")
+				tkMessageBox.showwarning("Warn", "[!] Error ao requisitar!")
 
 	menu.destroy()
 	global binnn
 	binnn = Tk()
 	binnn.title('Bin Checker')
-	print(" - obs; Pode Inserir CCV inteira junto a CVC e MES/DATA@ - Delimiter: | ")
+	tkMessageBox.showinfo("Info", " - obs; Pode Inserir CCV inteira junto a CVC e MES/DATA@ - Delimiter: | ")
 	binnn['bg'] = 'black'
 	#################################
 	Abrircc = Button(binnn, text="Abrir txt com Varias CC'S!", bg='#4F4F4F', fg='white', command=openccs).place(x=30, y=60)
@@ -364,7 +363,7 @@ def CleanTemp():
 		tkMessageBox.showinfo('Information', '[!] Removendo Startup!')
 		os.chdir('C:\\ProgramData')
 		os.system('rmdir Startup-Cleandir /S /Q')
-		print('\t[!] Startup Removido!\n')
+		tkMessageBox.showinfo('[!] Startup Removido!')
 
 	def cleanmgr():
 		tkMessageBox.showinfo('Information', "[@@@] Selecione todas as TextBox e Inicie uma Limpeza Profunda!")
@@ -454,7 +453,7 @@ def Consultar():
 
 		if nome:
 			os.system('cls')
-			print("[!] Aguarde cerca de 3 Minutos por Consultas!\n\n")
+			tkMessageBox.showinfo("Info", "[!] Aguarde cerca de 3 Minutos por Consultas!")
 			'''
 			count = 181
 			for i in range(1, count):
@@ -463,16 +462,16 @@ def Consultar():
 			    sleep(1)
 			'''
 			forms = {'enviarnome':nome.replace(' ','+'),'pesquisar':'Consultar'}
-			r = requests.post('http://consultas-net.umbler.net/Nome/', data=forms, headers=header)
+			r = requests.post('', data=forms, headers=header)
 			if r.status_code == 200:
 				html = r.text
-				print(html)
+				tkMessageBox.showinfo("Info", html)
 			else:
-				print("\t\t Error ao Puxar!\n :(")			
+				tkMessageBox.showwarning("Warn", "Error ao Puxar! :(")			
 
 		elif cpf:
 			os.system('cls')
-			print("[!] Aguarde cerca de 3 Minutos por Consultas!\n\n")
+			tkMessageBox.showinfo("Info", "[!] Aguarde cerca de 3 Minutos por Consultas!")
 			
 			count = 181
 			for i in range(1, count):
@@ -486,9 +485,9 @@ def Consultar():
 				bs = BeautifulSoup(html, 'lxml')
 				div = bs.find_all('div')
 				for divs in div:
-					print(divs.get_text()).strip('\n')
+					tkMessageBox.showinfo("Info", divs.get_text()).strip('\n')
 			else:
-				print("\t\t Error ao Puxar!\n :(")
+				tkMessageBox.showwarning("Warn","Error ao Puxar! :(")
 
 		elif cnpj:
 
@@ -498,29 +497,31 @@ def Consultar():
 			req = requests.get(enc.format(cnpj), headers=header)
 			code = req.status_code
 			html = req.text
+			data = ""
 			if code == 200:
 				receita = json.loads(html)
 				print(menu)
 				try:
-					print("Atividade Principal: %s"%receita['atividade_principal'][0]['text'])
-					print("Nome: %s"%receita['nome'])
-					print("Complemento: %s"%receita['complemento'])
-					print("UF: %s"%receita['uf'])
-					print("Telefone: %s"%receita['telefone'])
-					print("Email: %s"%receita['email'])
-					#print("(QSA) Nome: %s"%receita['qsa'][0]['nome'])
-					print("(QSA): %s"%receita['qsa'])
-					print("Situacao: %s"%receita['situacao'])
-					print("Abertura: %s"%receita['abertura'])
-					print("Bairro: %s"%receita['bairro'])
-					print("Ultima atualizacao: %s"%receita['ultima_atualizacao'])
-					print("Numero: %s"%receita['numero'])
-					print("CEP: %s"%receita['cep'])
-					print("Municipio: %s"%receita['municipio'])
-					print("CNPJ: %s"%receita['cnpj'])
-					print("Status: %s"%receita['status'])
+					data += "Atividade Principal: %s"%receita['atividade_principal'][0]['text']
+					data += "Nome: %s"%receita['nome']
+					data += "Complemento: %s"%receita['complemento']
+					data += "UF: %s"%receita['uf']
+					data += "Telefone: %s"%receita['telefone']
+					data += "Email: %s"%receita['email']
+					data += "(QSA) Nome: %s"%receita['qsa'][0]['nome']
+					data += "(QSA): %s"%receita['qsa']
+					data += "Situacao: %s"%receita['situacao']
+					data += "Abertura: %s"%receita['abertura']
+					data += "Bairro: %s"%receita['bairro']
+					data += "Ultima atualizacao: %s"%receita['ultima_atualizacao']
+					data += "Numero: %s"%receita['numero']
+					data += "CEP: %s"%receita['cep']
+					data += "Municipio: %s"%receita['municipio']
+					data += "CNPJ: %s"%receita['cnpj']
+					data += "Status: %s"%receita['status']
+					tkMessageBox.showinfo("Info", data)
 				except:
-					print("\t\t Error ao Puxar!\n :(")
+					tkMessageBox.showwarning("Warn", "Error ao Puxar! :(")
 
 		else:
 			adriellb = Label(window, text="Insira um CPF ou CNPJ valido!", fg="green", bg="black").pack(side=TOP)
@@ -619,23 +620,23 @@ def testar():
 			if r.status_code and b.status_code == 200:
 				if hashlib.sha512(loginn).hexdigest().strip('\n') in r.text:
 					if hashlib.sha512(password).hexdigest().strip('\n') in b.text:
-						print("[Logado com Sucesso!]\n")
+						tkMessageBox.showinfo("Info", "[Logado com Sucesso!]")
 						arq = open('conf.deb', 'w')
 						arq.write(hashlib.sha512(password).hexdigest().strip('\n'))
 						arq.close()
 						login.destroy()
 						main()
 					else:
-						print("[!] Usuario ou Senha Invalidos, Tente Novamente! 2\n")
+						tkMessageBox.showinfo("Info", "[!] Usuario ou Senha Invalidos, Tente Novamente! 2")
 				else:
-					print("[!] Usuario ou Senha Invalidos, Tente Novamente! 1\n")
+					tkMessageBox.showinfo("Info", "[!] Usuario ou Senha Invalidos, Tente Novamente! 1")
 			else:
-				print("[!] Problema de Conexao, Tente Novamente!\n")
+				tkMessageBox.showwarning("Warn", "[!] Problema de Conexao, Tente Novamente!")
 
 		elif 'atualizar' in ison.text:
-			print("[+] Voce deve atualizar Seu Programa, procure o Desenvolvedor e Contateo!\n%s"%menu)
+			tkMessageBox.showwarning("Warn", "[+] Voce deve atualizar Seu Programa, procure o Desenvolvedor e Contateo!\n%s"%menu)
 		else:
-			print("[!] A Aplicacao foi Desativada, Por algum motivo, contateo o Desenvolvedor!\n%s"%menu)
+			tkMessageBox.showwarning("Warn", "[!] A Aplicacao foi Desativada, Por algum motivo, contateo o Desenvolvedor!\n%s"%menu)
 
 
 def sair():
